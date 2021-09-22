@@ -3,7 +3,7 @@
   <entry>
     <title>PAT甲级</title>
     <url>/2021/09/21/PAT%E7%94%B2%E7%BA%A7/</url>
-    <content><![CDATA[<p>将会持续更新PAT甲级题解直到12月考完</p>
+    <content><![CDATA[<p>将会持续更新PAT甲级题解直到12月考完。</p>
 <p>如果哪里解法有疑问可以直接找博主询问。</p>
 <!-- toc -->
 
@@ -19,6 +19,8 @@
 <li><a href="#1009-product-of-polynomials"><strong>1009 Product of Polynomials</strong></a></li>
 <li><a href="#1010-radix"><strong>#1010 Radix</strong></a></li>
 <li><a href="#1011-world-cup-betting"><strong>1011 World Cup Betting</strong></a></li>
+<li><a href="#1012-the-best-rank"><strong>1012 The Best Rank</strong></a></li>
+<li><a href="#1013-battle-over-cities"><strong>1013 Battle Over Cities</strong></a></li>
 </ul>
 <!-- tocstop -->
 
@@ -97,25 +99,30 @@
 <p>代码：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">char</span> s[<span class="number">4</span>] = &#123; <span class="string">&#x27; &#x27;</span>,<span class="string">&#x27;W&#x27;</span>,<span class="string">&#x27;T&#x27;</span>,<span class="string">&#x27;L&#x27;</span> &#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    vector&lt;<span class="keyword">char</span>&gt;ans;</span><br><span class="line">    <span class="keyword">double</span> out = <span class="number">0.65</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= <span class="number">3</span>;i++) &#123;</span><br><span class="line">        <span class="keyword">double</span> x[<span class="number">4</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>;j &lt;= <span class="number">3</span>;j++) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, &amp;x[j]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">double</span> mx = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>;j &lt;= <span class="number">3</span>;j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (x[j] &gt; mx) &#123;</span><br><span class="line">                mx = x[j], index = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ans.<span class="built_in">push_back</span>(s[index]);</span><br><span class="line">        out *= mx;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%c %c %c %.2f&quot;</span>, ans[<span class="number">0</span>], ans[<span class="number">1</span>], ans[<span class="number">2</span>], (out - <span class="number">1</span>) * <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h2><span id="1012-the-best-rank"><strong>1012 The Best Rank</strong></span></h2><p>题意：</p>
+<p>​        给定$n$个学生的$id$和三门成绩和$m$次查询，每次询问给定一个$id$，问其对应的学生哪门课排名最高，若有排名相同的，按题目给定优先级选取优先级最高的。</p>
+<p>思路：</p>
+<p>​        排序四次，分别求出四种分数的排名，在最后一次排序后用哈希表存下对应$id$，最后按要求出书。</p>
+<p>小技巧：</p>
+<p>​        设一个全局变量，在写$cmp$函数时按数组编号来排序，可以只写一个$cmp$函数。</p>
+<p>代码：</p>
+<p>​        </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include&lt;bits/stdc++.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">const int maxn = 2e3 + 10;</span><br><span class="line">struct node &#123;</span><br><span class="line">    int no, data[4], rank[4];</span><br><span class="line">    int best;</span><br><span class="line">&#125;a[maxn];</span><br><span class="line">int k;</span><br><span class="line">bool cmp(node&amp; x, node&amp; y) &#123;</span><br><span class="line">    return x.data[k] &gt; y.data[k];</span><br><span class="line">&#125;</span><br><span class="line">int mp[1000010];</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    int n, m;</span><br><span class="line">    scanf(&quot;%d%d&quot;, &amp;n, &amp;m);</span><br><span class="line">    for (int i = 1;i &lt;= n;i++) &#123;</span><br><span class="line">        scanf(&quot;%d&quot;, &amp;a[i].no);</span><br><span class="line">        for (int j = 1;j &lt;= 3;j++) &#123;</span><br><span class="line">            scanf(&quot;%d&quot;, &amp;a[i].data[j]);</span><br><span class="line">            a[i].data[0] += a[i].data[j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    for (int i = 0;i &lt;= 3;i++) &#123;</span><br><span class="line">        k = i;</span><br><span class="line">        sort(a + 1, a + 1 + n, cmp);</span><br><span class="line">        a[1].rank[i] = 1;</span><br><span class="line">        for (int j = 2;j &lt;= n;j++) &#123;</span><br><span class="line">            a[j].rank[i] = (a[j].data[i] == a[j - 1].data[i]) ? a[j - 1].rank[i] : j;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    for (int i = 1;i &lt;= n;i++) &#123;</span><br><span class="line">        mp[a[i].no] = i;</span><br><span class="line">        int mx = n + 1;</span><br><span class="line">        for (int j = 0;j &lt;= 3;j++) &#123;</span><br><span class="line">            if (a[i].rank[j] &lt; mx) &#123;</span><br><span class="line">                mx = a[i].rank[j];</span><br><span class="line">                a[i].best = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    char ans[4] = &#123; &#x27;A&#x27;,&#x27;C&#x27;,&#x27;M&#x27;,&#x27;E&#x27; &#125;;</span><br><span class="line">    while (m--) &#123;</span><br><span class="line">        int s;</span><br><span class="line">        scanf(&quot;%d&quot;, &amp;s);</span><br><span class="line">        if (!mp[s]) &#123;</span><br><span class="line">            printf(&quot;N/A\n&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            int index = mp[s];</span><br><span class="line">            printf(&quot;%d %c\n&quot;, a[index].rank[a[index].best], ans[a[index].best]);</span><br><span class="line">        &#125;</span><br><span class="line">        // if (m) &#123;</span><br><span class="line">        //     printf(&quot;\n&quot;);</span><br><span class="line">        // &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2><span id="1013-battle-over-cities"><strong>1013 Battle Over Cities</strong></span></h2><p>题意：</p>
+<p>​        给定一个无向图，有$n$个节点，$m$条变，$k$次询问，每次询问中给出一个节点的编号，问去除这个节点后剩下的图中有的多少联通块。</p>
+<p>思路：</p>
+<p>​        1、写一个并查集，每次删除点后把所有点重新进行一次合并，最后看有多少个连通块，答案是连通块数量减二（因为要删除的点单独形成了一个连通块，而把剩余$ans-1$个连通块合在一起只要$ans-2$条边）。</p>
+<p>​        2、和并查集类似，每次在删除一个点后，从$1$到$n$，若没有遍历过就进行一次$dfs$，最后统计进行了几次$dfs$即可。</p>
+<p>代码$(dsu)$：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> P pair<span class="meta-string">&lt;int,int&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">1010</span>;</span><br><span class="line">vector &lt;P&gt;edge;</span><br><span class="line"><span class="keyword">int</span> n, m, k;</span><br><span class="line"><span class="keyword">int</span> fa[maxn];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i &lt;= n;i++) fa[i] = i;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Find</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x == fa[x] ? fa[x] : (fa[x] = <span class="built_in">Find</span>(fa[x]));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Union</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">	fa[<span class="built_in">Find</span>(x)] = <span class="built_in">Find</span>(y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	ios::<span class="built_in">sync_with_stdio</span>(<span class="literal">false</span>);</span><br><span class="line">	cin &gt;&gt; n &gt;&gt; m &gt;&gt; k;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= m;i++) &#123;</span><br><span class="line">		<span class="keyword">int</span> u, v;</span><br><span class="line">		cin &gt;&gt; u &gt;&gt; v;</span><br><span class="line">		edge.<span class="built_in">push_back</span>(&#123; u,v &#125;);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= k;i++) &#123;</span><br><span class="line">		<span class="built_in">init</span>();</span><br><span class="line">		<span class="keyword">int</span> x;</span><br><span class="line">		cin &gt;&gt; x;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">auto</span> e : edge) &#123;</span><br><span class="line">			<span class="keyword">if</span> (e.first == x || e.second == x) <span class="keyword">continue</span>;</span><br><span class="line">			<span class="built_in">Union</span>(e.first, e.second);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= n;i++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (fa[i] == i) ans++;</span><br><span class="line">		&#125;</span><br><span class="line">		cout &lt;&lt; ans - <span class="number">2</span> &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>PAT甲级</category>
       </categories>
       <tags>
         <tag>PAT甲级</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>今日落日</title>
-    <url>/2021/09/20/%E8%90%BD%E6%97%A5/</url>
-    <content><![CDATA[<p><img src="https://i.loli.net/2021/09/20/KCEvRrNi5Z3AhBV.jpg" alt="落日"></p>
-<p>摄于2021/9/20 PM6：01</p>
-]]></content>
-      <categories>
-        <category>DailyLife</category>
-      </categories>
-      <tags>
-        <tag>photo</tag>
       </tags>
   </entry>
   <entry>
@@ -301,6 +308,19 @@
       </categories>
       <tags>
         <tag>数论</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>今日落日</title>
+    <url>/2021/09/20/%E8%90%BD%E6%97%A5/</url>
+    <content><![CDATA[<p><img src="https://i.loli.net/2021/09/20/KCEvRrNi5Z3AhBV.jpg" alt="落日"></p>
+<p>摄于2021/9/20 PM6：01</p>
+]]></content>
+      <categories>
+        <category>DailyLife</category>
+      </categories>
+      <tags>
+        <tag>photo</tag>
       </tags>
   </entry>
 </search>
